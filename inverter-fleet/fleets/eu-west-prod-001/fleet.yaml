@@ -9,7 +9,7 @@ spec:
   template:
     spec:
       os:
-        image: quay.io/solar-farms/ai-inverter:1.5.0
+        image: quay.io/redhat/rhde:9.3
 
       config:
         - name: model-server
@@ -24,9 +24,11 @@ spec:
           - "ai-optimizer-model-server"
           - "web-interface"
           - "control-loop"
+          - "updated-pattern"
 
       systemd:
        matchPatterns:
         - inverter.service
         - rs485-protocol.service
+        - updated-example.service
 
