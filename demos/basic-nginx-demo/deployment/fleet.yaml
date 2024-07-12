@@ -40,7 +40,7 @@ spec:
           configType: KubernetesSecretProviderSpec
           secretRef:
             name: demo-secret
-            namespace: basic-nginx
+            namespace: secret-namespace
             mountPath: /etc/crio
       systemd:
         matchPatterns:
