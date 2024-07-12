@@ -26,20 +26,20 @@ spec:
                   path: "/etc/motd"
         - name: microshift-manifests
           configType: GitConfigProviderSpec
-          gitRef:  
+          gitRef:
             repository: basic-nginx-demo
             targetRevision: main
             path: /demos/basic-nginx-demo/configuration
         - name: ricky-super-secrets
           configType: GitConfigProviderSpec
-          gitRef:  
+          gitRef:
             repository: ricky-super-secrets
             targetRevision: main
             path: /configuration
         - name: k8s-secret-example
           configType: KubernetesSecretProviderSpec
           secretRef:
-            name: demo-secret
+            name: demo-secret-2
             namespace: basic-nginx
             mountPath: /etc/secrets
       systemd:
