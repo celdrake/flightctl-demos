@@ -36,12 +36,6 @@ spec:
             repository: ricky-super-secrets
             targetRevision: main
             path: /configuration
-        - name: k8s-secret-example
-          configType: KubernetesSecretProviderSpec
-          secretRef:
-            name: demo-secret-2
-            namespace: basic-nginx
-            mountPath: /etc/secrets
       systemd:
         matchPatterns:
           - "microshift.service"
