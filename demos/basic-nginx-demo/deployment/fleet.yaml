@@ -9,7 +9,7 @@ spec:
   template:
     spec:
       os:
-        image: quay.io/flightctl/flightctl-agent-basic-nginx:latest
+        image: quay.io/flightctl/flightctl-agent-basic-nginx:{{ device.metadata.labels[basic-nginx-version] }}
       config:
         - name: motd-update
           configType: InlineConfigProviderSpec
@@ -24,18 +24,6 @@ spec:
                   mode: 422
                   overwrite: true
                   path: "/etc/motd"
-        - name: microshift-manifests
-          configType: GitConfigProviderSpec
-          gitRef:  
-            repository: basic-nginx-demo
-            targetRevision: main
-            path: /demos/basic-nginx-demo/configuration
-        - name: ricky-super-secrets
-          configType: GitConfigProviderSpec
-          gitRef:  
-            repository: ricky-super-secrets
-            targetRevision: main
-            path: /configuration
       systemd:
         matchPatterns:
           - "microshift.service"
