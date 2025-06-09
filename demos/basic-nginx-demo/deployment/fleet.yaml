@@ -27,4 +27,4 @@ spec:
         matchPatterns:
           - "microshift.service"
           - "crio.service"
-          - "flightctl-agent.service"
+          - "flightctl-agent@test-this.service"
