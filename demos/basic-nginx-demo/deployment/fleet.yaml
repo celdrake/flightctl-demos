@@ -29,3 +29,4 @@ spec:
           - "crio.service"
           - "api-server@.service"
           - "sshd-test.service"
+          - "data-processor@@@batch-a.service"
