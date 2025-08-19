@@ -8,8 +8,6 @@ spec:
       fleet: basic-nginx-fleet
   template:
     spec:
-      os:
-        image: quay.io/flightctl/flightctl-agent-basic-nginx:latest
       config:
         - name: motd-update
           configType: InlineConfigProviderSpec
