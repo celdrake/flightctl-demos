@@ -13,7 +13,7 @@ spec:
           configType: InlineConfigProviderSpec
           inline:
             - path: "/etc/motd"
-              content: "This system is managed by flightctl."
+              content: "This system is managed by flightctl - new update."
               mode: 0644
         - name: microshift-manifests
           configType: GitConfigProviderSpec
