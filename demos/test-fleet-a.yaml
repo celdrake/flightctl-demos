@@ -1,0 +1,18 @@
+apiVersion: flightctl.io/v1alpha1
+kind: Fleet
+metadata:
+  labels: {}
+  name: test-fleet-a
+spec:
+  selector:
+    matchLabels:
+      fleet: test
+  template:
+    metadata:
+      labels:
+        fleet: test-fleet-a
+    spec:
+      applications: []
+      config: []
+      os:
+        image: quay.io/rh_ee_camadorg/oci-app:test-fleet
