@@ -1,0 +1,43 @@
+apiVersion: flightctl.io/v1alpha1
+kind: CatalogItem
+metadata:
+  name: rhel-bootc
+  labels:
+    vendor: redhat
+  catalog: edge-apps
+spec:
+  displayName: RHEL bootc
+  shortDescription: Red Hat Enterprise Linux bootc image
+  visibility: published
+  provider: Red Hat
+  support: https://access.redhat.com/support/
+
+  category: system
+  type: os
+  reference:
+    uri: quay.io/redhat/rhel-bootc
+    artifacts:
+      - type: qcow2
+        name: QCOW2 Disk Image
+        uri: quay.io/redhat/rhel-bootc-qcow2
+      - type: iso
+        name: ISO Installer
+        uri: quay.io/redhat/rhel-bootc-iso
+      - type: ami
+        name: AWS AMI
+        uri: quay.io/redhat/rhel-bootc-ami
+
+  versions:
+    - version: "9.5.0"
+      tag: "9.5"
+      channels: [fast]
+      replaces: "9.4.0"
+    - version: "9.4.0"
+      tag: "9.4"
+      channels: [stable, fast]
+      replaces: "9.3.0"
+    - version: "9.3.0"
+      tag: "9.3"
+      channels: [stable]
+      deprecation:
+        message: "End of support. Upgrade to 9.4 or later."

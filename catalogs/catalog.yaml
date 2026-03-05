@@ -1,0 +1,15 @@
+apiVersion: flightctl.io/v1alpha1
+kind: Catalog
+metadata:
+  name: edge-apps
+  labels:
+    environment: production
+spec:
+  displayName: Monitoring Applications
+  shortDescription: Observability stack for edge devices
+  icon: https://example.com/monitoring-icon.svg
+  provider: Platform Team
+  support: https://wiki.acme.com/edge-apps
+  visibility: published
+
+
