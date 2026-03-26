@@ -1,0 +1,262 @@
+apiVersion: flightctl.io/v1alpha1
+kind: Catalog
+metadata:
+  name: standalone-catalog
+  labels:
+    environment: production
+spec:
+  displayName: Monitoring Applications
+  shortDescription: Observability stack for edge devices
+  icon: https://example.com/monitoring-icon.svg
+  provider: Platform Team
+  support: https://wiki.acme.com/standalone-catalog
+  visibility: published
+
+---
+apiVersion: flightctl.io/v1alpha1
+kind: CatalogItem
+metadata:
+  name: edge-gateway
+  catalog: standalone-catalog
+spec:
+  displayName: Edge Gateway
+  shortDescription: Network gateway with progressive artifact expansion
+  provider: ACME Corp
+  category: application
+  type: container
+
+  # v1.x only shipped container; v2.0 added qcow2; v3.0 added iso.
+  artifacts:
+    - type: container
+      uri: quay.io/acme/edge-gateway
+    - type: qcow2
+      name: Appliance Image
+      uri: quay.io/acme/edge-gateway-appliance
+    - type: iso
+      name: ISO Installer
+      uri: quay.io/acme/edge-gateway-iso
+
+  versions:
+    # v3.1: all three artifacts available
+    - version: "3.1.0"
+      references:
+        container: "v3.1"
+        qcow2: "v3.1"
+        iso: "v3.1"
+      channels: [fast]
+      replaces: "3.0.0"
+
+    # v3.0: mixed references — container pinned by digest, qcow2/iso by tag
+    - version: "3.0.0"
+      references:
+        container: sha256:f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5
+        qcow2: "v3.0"
+        iso: "v3.0"
+      channels: [stable, fast]
+      replaces: "2.1.0"
+
+    # v2.1: container + qcow2 only (no iso yet)
+    - version: "2.1.0"
+      references:
+        container: sha256:b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3
+        qcow2: sha256:e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6
+      channels: [stable, fast]
+      replaces: "2.0.0"
+
+    # v2.0: container + qcow2 only (no iso yet)
+    - version: "2.0.0"
+      references:
+        container: sha256:a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2
+        qcow2: sha256:f0e1d2c3b4a5f6e7d8c9b0a1f2e3d4c5b6a7f8e9d0c1b2a3f4e5d6c7b8a9f0e1
+      channels: [stable]
+      replaces: "1.0.0"
+
+    # v1.0: container only
+    - version: "1.0.0"
+      references:
+        container: sha256:c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4
+      channels: [stable]
+
+  defaults:
+    config:
+      envVars:
+        GATEWAY_MODE: edge
+      ports:
+        - "8443:8443"
+
+---
+apiVersion: flightctl.io/v1alpha1
+kind: CatalogItem
+metadata:
+  name: rhel-bootc
+  labels:
+    vendor: redhat
+  catalog: standalone-catalog
+spec:
+  displayName: RHEL bootc
+  shortDescription: Red Hat Enterprise Linux bootc image
+  visibility: published
+  provider: Red Hat
+  support: https://access.redhat.com/support/
+
+  category: system
+  type: os
+  artifacts:
+    - type: container
+      name: bootc
+      uri: quay.io/redhat/rhel-bootc
+      default: true
+    - type: qcow2
+      name: QCOW2 Disk Image
+      uri: quay.io/redhat/rhel-bootc-qcow2
+    - type: iso
+      name: ISO Installer
+      uri: oci://quay.io/redhat/rhel-bootc-iso
+    - type: ami
+      name: AWS AMI
+      uri: s3://amzn.com/redhat/rhel-bootc-ami
+
+  versions:
+    - version: "9.5.0"
+      references:
+        container: "v9.5"
+        qcow2: "v9.5"
+        iso: s3://amzn.com/redhat/rhel-bootc-iso
+      channels: [fast]
+      replaces: "9.4.0"
+    - version: "9.4.0"
+      references:
+        container: "v9.4"
+        qcow2: "v9.4"
+      channels: [stable, fast]
+      replaces: "9.3.0"
+    - version: "9.3.0"
+      references:
+        iso: "sha256:foobarsomestring"
+      channels: [stable]
+      deprecation:
+        message: "End of support. Upgrade to 9.4 or later."
+
+---
+apiVersion: flightctl.io/v1alpha1
+kind: CatalogItem
+metadata:
+  name: nginx-edge
+  labels:
+    category: networking
+  catalog: standalone-catalog
+spec:
+  displayName: NGINX Edge Proxy
+  shortDescription: Web server for edge deployments
+  visibility: published
+  provider: NGINX Inc.
+  support: https://www.nginx.com/support/
+
+  category: application
+  type: quadlet
+  artifacts:
+    - type: container
+      uri: quay.io/example/nginx-quadlet
+    - type: qcow2
+      name: Appliance Image
+      uri: quay.io/example/nginx-quadlet-appliance
+
+  versions:
+    - version: "1.26.0"
+      references:
+        container: "1.26.0"
+        qcow2: "1.26.0"
+      channels: [fast]
+      replaces: "1.25.0"
+      # version-specific config overrides defaults.config
+      config:
+        envVars:
+          NGINX_WORKER_PROCESSES: auto
+          NGINX_ERROR_LOG_LEVEL: info
+          NGINX_ENABLE_OTEL: "true"
+      # version-specific JSON Schema documents new parameters
+      configSchema:
+        type: object
+        properties:
+          envVars:
+            type: object
+            properties:
+              NGINX_WORKER_PROCESSES:
+                type: string
+                description: Number of worker processes.
+                default: auto
+              NGINX_ERROR_LOG_LEVEL:
+                type: string
+                enum: [debug, info, notice, warn, error, crit]
+                default: info
+              NGINX_ENABLE_OTEL:
+                type: string
+                description: Enable OpenTelemetry tracing (new in 1.26).
+                enum: ["true", "false"]
+                default: "true"
+            required: [NGINX_WORKER_PROCESSES]
+          volumes:
+            type: array
+            items:
+              type: object
+              required: ["name", "image"]
+              properties: 
+                name:
+                  type: string
+                  description: "Volume name"
+                image:
+                  type: object
+                  description: "Volume image"
+                  required: ["reference"]
+                  properties:
+                    reference:
+                      type: string
+                      minLength: 1
+      readme: |
+        ## NGINX 1.26.0 (Fast Channel)
+        Preview release with OpenTelemetry support.
+
+        ### New Features
+        - Native OpenTelemetry tracing via NGINX_ENABLE_OTEL
+        - Improved HTTP/3 performance
+    - version: "1.25.0"
+      references:
+        qcow2: "1.25.0"
+      channels: [stable, fast]
+      replaces: "1.24.0"
+      readme: |
+        ## NGINX 1.25.0 (Stable)
+        Production-ready release with HTTP/3 support. No container img
+    - version: "1.24.0"
+      references:
+        container: "1.24.0"
+        qcow2: "1.24.0"
+      channels: [stable, fast]
+
+  # item-level defaults (used when version doesn't override)
+  defaults:
+    config:
+      envVars:
+        NGINX_WORKER_PROCESSES: auto
+        NGINX_ERROR_LOG_LEVEL: warn
+      volumes:
+        - name: nginx-html
+          mount:
+            path: /usr/share/nginx/html:ro
+
+    configSchema:
+      type: object
+      properties:
+        envVars:
+          type: object
+          properties:
+            NGINX_WORKER_PROCESSES:
+              type: string
+              description: Number of worker processes. Use "auto" to match CPU cores.
+              default: auto
+            NGINX_ERROR_LOG_LEVEL:
+              type: string
+              description: Error log verbosity.
+              enum: [debug, info, notice, warn, error, crit]
+              default: warn
+          required: [NGINX_WORKER_PROCESSES]
