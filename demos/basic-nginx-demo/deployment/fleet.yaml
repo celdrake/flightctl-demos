@@ -15,12 +15,6 @@ spec:
             - path: "/etc/motd"
               content: "This system is managed by flightctl - new update."
               mode: 0644
-        - name: microshift-manifests
-          configType: GitConfigProviderSpec
-          gitRef:  
-            repository: basic-nginx-demo
-            targetRevision: simple-demo-sept-23
-            path: /demos/basic-nginx-demo/configuration
       systemd:
         matchPatterns:
           - "chronyd.service"
